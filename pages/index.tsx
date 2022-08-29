@@ -8,7 +8,6 @@ import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   const edition = useEdition("0x50cFC3C293498AF5BFa8c4f589bf25afc70AA8a3");
-
   const connect = useMetamask();
   const address = useAddress();
 

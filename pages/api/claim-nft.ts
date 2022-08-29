@@ -24,6 +24,7 @@ export default async function claimNft(
 
   // First, get all the public repos of the thirdweb-dev organization
   // by asking the github api for the org's repos
+  // We don't use this here, but you could use it if you like.
   const repos: GithubRepo[] = await fetch(
     `https://api.github.com/orgs/thirdweb-dev/repos?per_page=100`
   ).then((res) => res.json());
