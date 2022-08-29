@@ -1,0 +1,28 @@
+{
+  "name": "github-contributor-nft-rewards",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@thirdweb-dev/auth": "^0.2.0",
+    "@thirdweb-dev/react": "^2",
+    "@thirdweb-dev/sdk": "2.3.38",
+    "ethers": "^5.6.8",
+    "next": "^12.1.6",
+    "next-auth": "^4.10.3",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "@types/react": "^17.0.45",
+    "eslint": "^8.16.0",
+    "eslint-config-next": "^12.1.6",
+    "typescript": "^4.7.2"
+  }
+}
