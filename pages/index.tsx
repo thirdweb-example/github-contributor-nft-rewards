@@ -1,4 +1,11 @@
-import { useAddress, useEdition, useMetamask } from "@thirdweb-dev/react";
+import {
+  ChainId,
+  useAddress,
+  useEdition,
+  useMetamask,
+  useNetwork,
+  useNetworkMismatch,
+} from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
 import { useState } from "react";
 import { getUser } from "../auth.config";
@@ -10,11 +17,23 @@ const Home: NextPage = () => {
   const edition = useEdition("0x50cFC3C293498AF5BFa8c4f589bf25afc70AA8a3");
   const connect = useMetamask();
   const address = useAddress();
+  const [, switchNetwork] = useNetwork();
+  const networkMismatch = useNetworkMismatch();
 
   const [loading, setLoading] = useState<boolean>(false);
 
   async function mintNft() {
     setLoading(true);
+
+    if (!address) {
+      connect();
+      return;
+    }
+
+    if (networkMismatch) {
+      switchNetwork?.(ChainId.Goerli);
+      return;
+    }
 
     try {
       // Fetch /api/claim-nft
