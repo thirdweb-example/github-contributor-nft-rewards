@@ -28,7 +28,7 @@ const Home: NextPage = () => {
       const res = await req.json();
 
       if (!req.ok) {
-        alert(`Error:, ${res.message}`);
+        alert(`Error: ${res.message}`);
         return;
       }
 
