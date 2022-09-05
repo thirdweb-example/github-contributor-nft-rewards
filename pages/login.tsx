@@ -9,21 +9,29 @@ export default function Login() {
   const address = useAddress();
   const connect = useMetamask();
 
+  if (!session) {
+    return (
+      <div className={styles.container}>
+        <button className={styles.mainButton} onClick={() => signIn()}>
+          Sign in with GitHub
+        </button>
+      </div>
+    );
+  }
+
+  if (!address) {
+    <div className={styles.container}>
+      <button className={styles.mainButton} onClick={() => connect()}>
+        Connect Wallet
+      </button>
+    </div>;
+  }
+
   return (
     <div className={styles.container}>
-      {!address ? (
-        <button className={styles.mainButton} onClick={() => connect()}>
-          Connect Wallet
-        </button>
-      ) : !session ? (
-        <button className={styles.mainButton} onClick={() => signIn()}>
-          Sign in
-        </button>
-      ) : (
-        <button className={styles.mainButton} onClick={() => login()}>
-          Sign in with Ethereum
-        </button>
-      )}
+      <button className={styles.mainButton} onClick={() => login()}>
+        Sign in with Ethereum
+      </button>
     </div>
   );
 }

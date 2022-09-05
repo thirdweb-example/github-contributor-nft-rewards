@@ -5,24 +5,26 @@ import {
   useMetamask,
   useNetwork,
   useNetworkMismatch,
+  useOwnedNFTs,
 } from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
+import { unstable_getServerSession } from "next-auth/next";
 import { useState } from "react";
 import { getUser } from "../auth.config";
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]";
 import styles from "../styles/Home.module.css";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const Home: NextPage = () => {
-  const edition = useEdition("0x50cFC3C293498AF5BFa8c4f589bf25afc70AA8a3");
+  const edition = useEdition("0xD71c27e6325f018b15E16C3992654F1b089C5fCe");
   const connect = useMetamask();
   const address = useAddress();
   const [, switchNetwork] = useNetwork();
   const networkMismatch = useNetworkMismatch();
+  const { data: ownedNFTs, isLoading } = useOwnedNFTs(edition, address);
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  async function mintNft() {
+  const mintNft = async () => {
     setLoading(true);
 
     if (!address) {
@@ -36,7 +38,6 @@ const Home: NextPage = () => {
     }
 
     try {
-      // Fetch /api/claim-nft
       const req = await fetch("/api/claim-nft", {
         method: "POST",
         headers: {
@@ -51,25 +52,34 @@ const Home: NextPage = () => {
         return;
       }
 
-      // Use the payload to mint the nft
-      const tx = await edition?.signature.mint(res.signedPayload);
+      await edition?.signature.mint(res.signedPayload);
 
-      alert("Succesfully minted NFT 🚀");
+      alert("Successfully minted NFT 🚀");
     } catch (err) {
       console.error(err);
       alert("Failed to mint NFT");
     } finally {
       setLoading(false);
     }
+  };
+
+  const hasClaimed = ownedNFTs && ownedNFTs?.length > 0;
+
+  if (isLoading) {
+    return <div className={styles.container}>Loading...</div>;
   }
 
   return (
     <div className={styles.container}>
       <h1>GitHub Contributor NFTs</h1>
 
-      <p>
-        Claim an NFT if you have contributed to any of thirdweb&apos;s repos.
-      </p>
+      {hasClaimed ? (
+        <p>You already have an NFT!</p>
+      ) : (
+        <p>
+          Claim an NFT if you have contributed to any of thirdweb&apos;s repos.
+        </p>
+      )}
 
       {!address ? (
         <button
@@ -80,13 +90,15 @@ const Home: NextPage = () => {
           Connect to Metamask
         </button>
       ) : (
-        <button
-          className={styles.mainButton}
-          disabled={loading}
-          onClick={mintNft}
-        >
-          {loading ? "Loading..." : "Claim NFT"}
-        </button>
+        !hasClaimed && (
+          <button
+            className={styles.mainButton}
+            disabled={loading || hasClaimed}
+            onClick={mintNft}
+          >
+            {loading ? "Loading..." : "Claim NFT"}
+          </button>
+        )
       )}
     </div>
   );
@@ -95,17 +107,14 @@ const Home: NextPage = () => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // Get user (both NextAuth & Thirdweb)
   const thirdwebUser = getUser(context.req);
 
-  // Get NextAuth session
   const session = await unstable_getServerSession(
     context.req,
     context.res,
     authOptions
   );
 
-  // If either !thirdwebUser || !session, redirect to login
   if (!thirdwebUser || !session) {
     return {
       redirect: {
