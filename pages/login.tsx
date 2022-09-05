@@ -20,11 +20,13 @@ export default function Login() {
   }
 
   if (!address) {
-    <div className={styles.container}>
-      <button className={styles.mainButton} onClick={() => connect()}>
-        Connect Wallet
-      </button>
-    </div>;
+    return (
+      <div className={styles.container}>
+        <button className={styles.mainButton} onClick={() => connect()}>
+          Connect Wallet
+        </button>
+      </div>
+    );
   }
 
   return (
