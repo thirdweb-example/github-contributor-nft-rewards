@@ -6,12 +6,10 @@ import {
   useNetwork,
   useNetworkMismatch,
   useOwnedNFTs,
-  useUser,
 } from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth/next";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getUser } from "../auth.config";
 import styles from "../styles/Home.module.css";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -23,9 +21,6 @@ const Home: NextPage = () => {
   const [, switchNetwork] = useNetwork();
   const networkMismatch = useNetworkMismatch();
   const { data: ownedNFTs, isLoading } = useOwnedNFTs(edition, address);
-  const { user, isLoading: userLoading } = useUser();
-  const { status } = useSession();
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const mintNft = async () => {
@@ -68,14 +63,6 @@ const Home: NextPage = () => {
   };
 
   const hasClaimed = ownedNFTs && ownedNFTs?.length > 0;
-
-  useEffect(() => {
-    if (userLoading || status === "loading") return;
-
-    if (!user || status === "unauthenticated") {
-      window.location.href = "/login";
-    }
-  }, [status, user, userLoading]);
 
   if (isLoading) {
     return <div className={styles.container}>Loading...</div>;
