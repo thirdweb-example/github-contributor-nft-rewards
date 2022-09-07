@@ -3,9 +3,9 @@ import { useAddress, useLogin, useMetamask } from "@thirdweb-dev/react";
 import { useSession, signIn } from "next-auth/react";
 import styles from "../styles/Home.module.css";
 
-export default function Login() {
-  const login = useLogin();
+const Login = () => {
   const { data: session } = useSession();
+  const login = useLogin();
   const address = useAddress();
   const connect = useMetamask();
 
@@ -36,4 +36,6 @@ export default function Login() {
       </button>
     </div>
   );
-}
+};
+
+export default Login;

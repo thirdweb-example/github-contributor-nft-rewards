@@ -5,16 +5,16 @@ import GithubContributor from "../../types/GithubContributor";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { authOptions } from "./auth/[...nextauth]";
 
-export default async function claimNft(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const claimNft = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   const session = await unstable_getServerSession(req, res, authOptions);
   const thirdwebUser = await getUser(req);
 
   if (!session || !thirdwebUser) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const reposToCheck = [
@@ -33,6 +33,7 @@ export default async function claimNft(
   ];
 
   let hasContributed = false;
+
   for (const repo of reposToCheck) {
     const contributors: GithubContributor[] = await fetch(
       `https://api.github.com/repos/thirdweb-dev/${repo}/contributors`,
@@ -49,13 +50,11 @@ export default async function claimNft(
 
     if (hasContributedToThisRepo) {
       hasContributed = true;
-      break;
     }
   }
 
   if (!hasContributed) {
-    res.status(401).json({ message: "Sorry, you don't qualify" });
-    return;
+    return res.status(401).json({ message: "Sorry, you don't qualify" });
   }
 
   const sdk = ThirdwebSDK.fromPrivateKey(
@@ -68,8 +67,7 @@ export default async function claimNft(
   const balance = await edition.balanceOf(thirdwebUser.address, 0);
 
   if (balance.gt(0)) {
-    res.status(401).json({ message: "You already have an NFT" });
-    return;
+    return res.status(401).json({ message: "You already have an NFT" });
   }
 
   const signedPayload = await edition.signature.generateFromTokenId({
@@ -78,5 +76,7 @@ export default async function claimNft(
     to: thirdwebUser.address,
   });
 
-  res.status(200).json({ signedPayload });
-}
+  return res.status(200).json({ signedPayload });
+};
+
+export default claimNft;

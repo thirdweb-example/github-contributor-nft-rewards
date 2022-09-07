@@ -3,7 +3,6 @@ import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 
-// This is the chainId your dApp will work on.
 const activeChainId = ChainId.Goerli;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -12,8 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       desiredChainId={activeChainId}
       authConfig={{
         authUrl: "/api/thirdwebauth",
-        domain:
-          "https://github-contributor-nft-rewards-avneesh0612.vercel.app",
+        domain: "https://github-contributor-nft-rewards-avneesh0612.vercel.app",
         loginRedirect: "/",
       }}
     >

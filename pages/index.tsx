@@ -5,7 +5,6 @@ import {
   useMetamask,
   useNetwork,
   useNetworkMismatch,
-  useOwnedNFTs,
 } from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth/next";
@@ -20,35 +19,28 @@ const Home: NextPage = () => {
   const address = useAddress();
   const [, switchNetwork] = useNetwork();
   const networkMismatch = useNetworkMismatch();
-  const { data: ownedNFTs, isLoading } = useOwnedNFTs(edition, address);
   const [loading, setLoading] = useState<boolean>(false);
 
   const mintNft = async () => {
     setLoading(true);
 
     if (!address) {
-      connect();
-      return;
+      return connect();
     }
 
     if (networkMismatch) {
-      switchNetwork?.(ChainId.Goerli);
-      return;
+      return switchNetwork?.(ChainId.Goerli);
     }
 
     try {
       const req = await fetch("/api/claim-nft", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
       const res = await req.json();
 
       if (!req.ok) {
-        alert(`Error: ${res.message}`);
-        return;
+        return alert(`Error: ${res.message}`);
       }
 
       await edition?.signature.mint(res.signedPayload);
@@ -62,23 +54,12 @@ const Home: NextPage = () => {
     }
   };
 
-  const hasClaimed = ownedNFTs && ownedNFTs?.length > 0;
-
-  if (isLoading) {
-    return <div className={styles.container}>Loading...</div>;
-  }
-
   return (
     <div className={styles.container}>
       <h1>GitHub Contributor NFTs</h1>
-
-      {hasClaimed ? (
-        <p>You already have an NFT!</p>
-      ) : (
-        <p>
-          Claim an NFT if you have contributed to any of thirdweb&apos;s repos.
-        </p>
-      )}
+      <p>
+        Claim an NFT if you have contributed to any of thirdweb&apos;s repos.
+      </p>
 
       {!address ? (
         <button
@@ -89,15 +70,13 @@ const Home: NextPage = () => {
           Connect to Metamask
         </button>
       ) : (
-        !hasClaimed && (
-          <button
-            className={styles.mainButton}
-            disabled={loading || hasClaimed}
-            onClick={mintNft}
-          >
-            {loading ? "Loading..." : "Claim NFT"}
-          </button>
-        )
+        <button
+          className={styles.mainButton}
+          disabled={loading}
+          onClick={mintNft}
+        >
+          {loading ? "Loading..." : "Claim NFT"}
+        </button>
       )}
     </div>
   );
