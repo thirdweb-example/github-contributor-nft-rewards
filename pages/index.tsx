@@ -24,10 +24,6 @@ const Home: NextPage = () => {
   const mintNft = async () => {
     setLoading(true);
 
-    if (!address) {
-      return connect();
-    }
-
     if (networkMismatch) {
       return switchNetwork?.(ChainId.Goerli);
     }
