@@ -1,6 +1,6 @@
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import { SessionProvider } from "next-auth/react";
-import { AppProps } from "next/dist/shared/lib/router/router";
+import { AppProps } from "next/app";
 import "../styles/globals.css";
 
 const activeChainId = ChainId.Goerli;
