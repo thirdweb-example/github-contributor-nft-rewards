@@ -7,52 +7,66 @@ import {
   useNetworkMismatch,
 } from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
-import { unstable_getServerSession } from "next-auth/next";
 import { useState } from "react";
 import { getUser } from "../auth.config";
-import styles from "../styles/Home.module.css";
+import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const edition = useEdition("0xD71c27e6325f018b15E16C3992654F1b089C5fCe");
+  const edition = useEdition("0x50cFC3C293498AF5BFa8c4f589bf25afc70AA8a3");
   const connect = useMetamask();
   const address = useAddress();
   const [, switchNetwork] = useNetwork();
   const networkMismatch = useNetworkMismatch();
+
   const [loading, setLoading] = useState<boolean>(false);
 
-  const mintNft = async () => {
+  async function mintNft() {
     setLoading(true);
 
+    if (!address) {
+      connect();
+      return;
+    }
+
     if (networkMismatch) {
-      return switchNetwork?.(ChainId.Goerli);
+      switchNetwork?.(ChainId.Goerli);
+      return;
     }
 
     try {
+      // Fetch /api/claim-nft
       const req = await fetch("/api/claim-nft", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       const res = await req.json();
 
       if (!req.ok) {
-        return alert(`Error: ${res.message}`);
+        alert(`Error: ${res.message}`);
+        return;
       }
 
-      await edition?.signature.mint(res.signedPayload);
+      // Use the payload to mint the nft
+      const tx = await edition?.signature.mint(res.signedPayload);
 
-      alert("Successfully minted NFT 🚀");
+      alert("Succesfully minted NFT 🚀");
     } catch (err) {
       console.error(err);
       alert("Failed to mint NFT");
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className={styles.container}>
       <h1>GitHub Contributor NFTs</h1>
+
       <p>
         Claim an NFT if you have contributed to any of thirdweb&apos;s repos.
       </p>
@@ -81,14 +95,17 @@ const Home: NextPage = () => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const thirdwebUser = await getUser(context.req);
+  // Get user (both NextAuth & Thirdweb)
+  const thirdwebUser = getUser(context.req);
 
+  // Get NextAuth session
   const session = await unstable_getServerSession(
     context.req,
     context.res,
     authOptions
   );
 
+  // If either !thirdwebUser || !session, redirect to login
   if (!thirdwebUser || !session) {
     return {
       redirect: {
