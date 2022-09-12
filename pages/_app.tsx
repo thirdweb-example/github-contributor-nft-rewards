@@ -1,11 +1,14 @@
-import type { AppProps } from "next/app";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import { SessionProvider } from "next-auth/react";
+import { AppProps } from "next/app";
 import "../styles/globals.css";
 
 const activeChainId = ChainId.Goerli;
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) => {
   return (
     <ThirdwebProvider
       desiredChainId={activeChainId}
@@ -15,11 +18,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         loginRedirect: "/",
       }}
     >
-      <SessionProvider session={pageProps.session} refetchInterval={0}>
+      <SessionProvider session={session} refetchInterval={0}>
         <Component {...pageProps} />
       </SessionProvider>
     </ThirdwebProvider>
   );
-}
+};
 
 export default MyApp;
