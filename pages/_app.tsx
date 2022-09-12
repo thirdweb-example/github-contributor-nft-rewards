@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       desiredChainId={activeChainId}
       authConfig={{
         authUrl: "/api/thirdwebauth",
-        domain: "https://github-contributor-nft-rewards-avneesh0612.vercel.app",
+        domain: "example.org",
         loginRedirect: "/",
       }}
     >
