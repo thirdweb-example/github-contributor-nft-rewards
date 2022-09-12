@@ -933,7 +933,7 @@
     "@types/use-sync-external-store" "^0.0.3"
     use-sync-external-store "^1.2.0"
 
-"@thirdweb-dev/auth@^1.0.8":
+"@thirdweb-dev/auth@^1":
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/@thirdweb-dev/auth/-/auth-1.0.8.tgz#f537d15fdb9f14a2f6966b22d183c6bf7f99c9dc"
   integrity sha512-u9EQDA5OKYlM1/4nLWYV6ek1ynLmR687CFqzDuoTP7VXQKHBDTBwoxmCYdHqKdCLRBj4zXHfzh83NVm2j//HuA==
@@ -977,7 +977,7 @@
     tiny-invariant "^1.2.0"
     wagmi "^0.2.28"
 
-"@thirdweb-dev/sdk@2.4.9":
+"@thirdweb-dev/sdk@^2":
   version "2.4.9"
   resolved "https://registry.yarnpkg.com/@thirdweb-dev/sdk/-/sdk-2.4.9.tgz#33a99f5c6aca8bf27065872646c17ee2381a5ca7"
   integrity sha512-1+rhtLKlw5yMkBZ6JUVZItLo8sO77WJ2mhvTmKnEzQbfshdCd+1icq8Cw8v5AVFbpdMKTmF20wdW9bkbIzQ1LA==

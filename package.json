@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@thirdweb-dev/auth": "^1.0.8",
+    "@thirdweb-dev/auth": "^1",
     "@thirdweb-dev/react": "^2",
-    "@thirdweb-dev/sdk": "2.4.9",
+    "@thirdweb-dev/sdk": "^2",
     "ethers": "^5.7.0",
     "next": "12.2.0",
     "next-auth": "^4.10.3",
