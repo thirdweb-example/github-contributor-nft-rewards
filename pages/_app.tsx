@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       desiredChainId={activeChainId}
       authConfig={{
         authUrl: "/api/thirdwebauth",
-        domain: "example.org",
+        domain: "example.com",
         loginRedirect: "/",
       }}
     >
