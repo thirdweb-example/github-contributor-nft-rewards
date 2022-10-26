@@ -76,7 +76,7 @@ const claimNft = async (req: NextApiRequest, res: NextApiResponse) => {
     "goerli" // configure this to your network
   );
 
-  const edition = sdk.getEdition("0xD71c27e6325f018b15E16C3992654F1b089C5fCe");
+  const edition = await sdk.getContract("0xD71c27e6325f018b15E16C3992654F1b089C5fCe", 'edition');
 
   const balance = await edition.balanceOf(thirdwebUser.address, 0);
 

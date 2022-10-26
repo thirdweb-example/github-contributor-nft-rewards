@@ -1,33 +1,19 @@
-import {
-  ChainId,
-  useAddress,
-  useEdition,
-  useMetamask,
-  useNetwork,
-  useNetworkMismatch,
-} from "@thirdweb-dev/react";
+import { useContract, Web3Button } from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth/next";
-import { useState } from "react";
 import { getUser } from "../auth.config";
 import styles from "../styles/Home.module.css";
 import { authOptions } from "./api/auth/[...nextauth]";
 
+const EDITION_CONTRACT_ADDRESS = "0xD71c27e6325f018b15E16C3992654F1b089C5fCe";
+
 const Home: NextPage = () => {
-  const edition = useEdition("0xD71c27e6325f018b15E16C3992654F1b089C5fCe");
-  const connect = useMetamask();
-  const address = useAddress();
-  const [, switchNetwork] = useNetwork();
-  const networkMismatch = useNetworkMismatch();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { contract: edition } = useContract(
+    EDITION_CONTRACT_ADDRESS,
+    "edition"
+  );
 
   const mintNft = async () => {
-    setLoading(true);
-
-    if (networkMismatch) {
-      return switchNetwork?.(ChainId.Goerli);
-    }
-
     try {
       const req = await fetch("/api/claim-nft", {
         method: "POST",
@@ -45,8 +31,6 @@ const Home: NextPage = () => {
     } catch (err) {
       console.error(err);
       alert("Failed to mint NFT");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -57,23 +41,12 @@ const Home: NextPage = () => {
         Claim an NFT if you have contributed to any of thirdweb&apos;s repos.
       </p>
 
-      {!address ? (
-        <button
-          className={styles.mainButton}
-          disabled={loading}
-          onClick={() => connect()}
-        >
-          Connect to Metamask
-        </button>
-      ) : (
-        <button
-          className={styles.mainButton}
-          disabled={loading}
-          onClick={mintNft}
-        >
-          {loading ? "Loading..." : "Claim NFT"}
-        </button>
-      )}
+      <Web3Button
+        contractAddress={EDITION_CONTRACT_ADDRESS}
+        action={() => mintNft()}
+      >
+        Claim NFT
+      </Web3Button>
     </div>
   );
 };

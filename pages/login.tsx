@@ -1,13 +1,10 @@
 import React from "react";
-import { useAddress, useLogin, useMetamask } from "@thirdweb-dev/react";
+import { ConnectWallet } from "@thirdweb-dev/react";
 import { useSession, signIn } from "next-auth/react";
 import styles from "../styles/Home.module.css";
 
 const Login = () => {
   const { data: session } = useSession();
-  const login = useLogin();
-  const address = useAddress();
-  const connect = useMetamask();
 
   if (!session) {
     return (
@@ -19,21 +16,13 @@ const Login = () => {
     );
   }
 
-  if (!address) {
-    return (
-      <div className={styles.container}>
-        <button className={styles.mainButton} onClick={() => connect()}>
-          Connect Wallet
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.container}>
-      <button className={styles.mainButton} onClick={() => login()}>
-        Sign in with Ethereum
-      </button>
+      <ConnectWallet
+        auth={{
+          loginOptional: false,
+        }}
+      />
     </div>
   );
 };
