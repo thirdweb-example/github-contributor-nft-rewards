@@ -5,7 +5,7 @@ import { getUser } from "../auth.config";
 import styles from "../styles/Home.module.css";
 import { authOptions } from "./api/auth/[...nextauth]";
 
-const EDITION_CONTRACT_ADDRESS = "0xD71c27e6325f018b15E16C3992654F1b089C5fCe";
+const EDITION_CONTRACT_ADDRESS = "0x16ab32FAd64E9369e9158B45a0207640dec12056";
 
 const Home: NextPage = () => {
   const { contract: edition } = useContract(
@@ -22,7 +22,8 @@ const Home: NextPage = () => {
       const res = await req.json();
 
       if (!req.ok) {
-        return alert(`Error: ${res.message}`);
+        alert(`Error: ${res.message}`);
+        return;
       }
 
       await edition?.signature.mint(res.signedPayload);
