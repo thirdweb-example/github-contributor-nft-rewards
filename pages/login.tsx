@@ -9,6 +9,11 @@ const Login = () => {
   if (!session) {
     return (
       <div className={styles.container}>
+        <h1>GitHub Contributor Rewards</h1>
+        <p>
+          Claim an NFT if you have contributed to any of thirdweb&apos;s GitHub
+          repositories!
+        </p>
         <button className={styles.mainButton} onClick={() => signIn()}>
           Sign in with GitHub
         </button>
@@ -18,6 +23,11 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
+      <h1>GitHub Contributor Rewards</h1>
+      <p>
+        Claim an NFT if you have contributed to any of thirdweb&apos;s GitHub
+        repositories!
+      </p>
       <ConnectWallet
         auth={{
           loginOptional: false,
