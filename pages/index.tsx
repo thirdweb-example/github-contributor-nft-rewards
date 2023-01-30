@@ -1,6 +1,6 @@
 import { useContract, Web3Button } from "@thirdweb-dev/react";
 import type { GetServerSideProps, NextPage } from "next";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { getUser } from "../auth.config";
 import styles from "../styles/Home.module.css";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -22,8 +22,7 @@ const Home: NextPage = () => {
       const res = await req.json();
 
       if (!req.ok) {
-        alert(`Error: ${res.message}`);
-        return;
+        return alert(`Error: ${res.message}`);
       }
 
       await edition?.signature.mint(res.signedPayload);
@@ -57,11 +56,7 @@ export default Home;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const thirdwebUser = await getUser(context.req);
 
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!thirdwebUser || !session) {
     return {

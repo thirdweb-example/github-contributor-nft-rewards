@@ -15,7 +15,6 @@ const MyApp = ({
       authConfig={{
         authUrl: "/api/thirdwebauth",
         domain: "example.com",
-        loginRedirect: "/",
       }}
     >
       <SessionProvider session={session} refetchInterval={0}>
