@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { getUser } from "../../auth.config";
 import GithubContributor from "../../types/GithubContributor";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -11,7 +11,7 @@ const claimNft = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(405).json({ error: "Method not allowed" });
   }
   // 1. Verify the user with NextAuth (their GitHub account)
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
   // 2. Verify the user using thirdweb Auth
   const thirdwebUser = await getUser(req);
 
@@ -72,11 +72,14 @@ const claimNft = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const sdk = ThirdwebSDK.fromPrivateKey(
-    process.env.PRIVATE_KEY as string,
+    process.env.THIRDWEB_AUTH_PRIVATE_KEY as string,
     "goerli" // configure this to your network
   );
 
-  const edition = await sdk.getContract("0x16ab32FAd64E9369e9158B45a0207640dec12056", 'edition');
+  const edition = await sdk.getContract(
+    "0x16ab32FAd64E9369e9158B45a0207640dec12056",
+    "edition"
+  );
 
   const balance = await edition.balanceOf(thirdwebUser.address, 0);
 

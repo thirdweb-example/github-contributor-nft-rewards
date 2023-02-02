@@ -22,12 +22,13 @@ npx thirdweb create --template github-contributor-nft-rewards
 - You need the following variables in your `.env.local` file:
 
 ```
-PRIVATE_KEY=
+THIRDWEB_AUTH_PRIVATE_KEY=
 GITHUB_ID=
 GITHUB_SECRET=
 GITHUB_ACCESS_TOKEN=
 NEXTAUTH_URL=
 NEXTAUTH_SECRET=
+NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN=
 ```
 
 ## How It Works
