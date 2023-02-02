@@ -14,7 +14,7 @@ const MyApp = ({
       desiredChainId={activeChainId}
       authConfig={{
         authUrl: "/api/thirdwebauth",
-        domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN,
+        domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
       }}
     >
       <SessionProvider session={session} refetchInterval={0}>
