@@ -1,9 +1,10 @@
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import "../styles/globals.css";
 
-const activeChainId = ChainId.Goerli;
+// This is the chain your dApp will work on.
+const activeChain = "goerli";
 
 const MyApp = ({
   Component,
@@ -11,7 +12,7 @@ const MyApp = ({
 }: AppProps) => {
   return (
     <ThirdwebProvider
-      desiredChainId={activeChainId}
+      activeChain={activeChain}
       authConfig={{
         authUrl: "/api/thirdwebauth",
         domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
