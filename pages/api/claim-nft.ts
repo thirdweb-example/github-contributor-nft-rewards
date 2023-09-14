@@ -73,7 +73,10 @@ const claimNft = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const sdk = ThirdwebSDK.fromPrivateKey(
     process.env.THIRDWEB_AUTH_PRIVATE_KEY as string,
-    "goerli" // configure this to your network
+    "goerli", // configure this to your network,
+    {
+      secretKey: process.env.TW_SECRET_KEY,
+    }
   );
 
   const edition = await sdk.getContract(

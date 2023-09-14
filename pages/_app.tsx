@@ -17,6 +17,7 @@ const MyApp = ({
         authUrl: "/api/thirdwebauth",
         domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
       }}
+      clientId={process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID as string}
     >
       <SessionProvider session={session} refetchInterval={0}>
         <Component {...pageProps} />

@@ -22,7 +22,7 @@ const Login = () => {
           Claim an NFT if you have contributed to any of thirdweb&apos;s GitHub
           repositories!
         </p>
-        <button className={styles.mainButton} onClick={() => signIn()}>
+        <button className={styles.mainButton} onClick={() => signIn("github")}>
           Sign in with GitHub
         </button>
       </div>
